@@ -9,3 +9,5 @@
 - The first player to reach 100 points on GLOBAL score wins the game
 
 - Code Challenge 1 - A player loses his entire score when he rolls two 6 in a row. After that, it's the other player's turn
+
+- Code Challenge 2 - Players can now predefine their winning scores at the beginning of the game
