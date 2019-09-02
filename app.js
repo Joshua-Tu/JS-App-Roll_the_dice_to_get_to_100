@@ -10,10 +10,16 @@ GAME RULES:
 */
 
 // prevDice is for Coding Challenge 1
-let winningScore, prevDice, scores, roundScore, activePlayer, dice, gamePlaying; //gamePlaying is a state variable
+let predefinedScore,
+  prevDice,
+  scores,
+  roundScore,
+  activePlayer,
+  dice,
+  gamePlaying; //gamePlaying is a state variable
 
 init();
-document.querySelector("input").placeholder = winningScore;
+
 document.querySelector(".btn-roll").addEventListener("click", () => {
   if (gamePlaying) {
     // 1. Random number
@@ -25,14 +31,17 @@ document.querySelector(".btn-roll").addEventListener("click", () => {
     // 3. Update the round score if the rolled number was NOT a one
     if (dice !== 1) {
       //* ************* Code Challenge 1 - A player loses his entire score when he rolls two 6 in a row. After that, it's the other player's turn/
-      console.log(`prevDice is ${prevDice}`);
-      console.log(`Dice is ${dice}`);
+      // console.log(`prevDice is ${prevDice}`);
+      // console.log(`Dice is ${dice}`);
       if (dice == 6 && prevDice == 6) {
+        scores[activePlayer] = 0;
         document.querySelector("#current-" + activePlayer).textContent = 0;
         document.querySelector("#score-" + activePlayer).textContent = 0;
+        console.log("rolled two 6 in a row");
         nextPlayer();
       }
       ////*********** */
+
       //Add score
       roundScore += dice;
       document.querySelector(
@@ -42,6 +51,7 @@ document.querySelector(".btn-roll").addEventListener("click", () => {
       prevDice = dice;
     } else {
       //Next player
+      console.log("rolled 1");
       nextPlayer();
     }
   }
@@ -56,8 +66,14 @@ document.querySelector(".btn-hold").addEventListener("click", () => {
     document.querySelector("#score-" + activePlayer).textContent =
       scores[activePlayer];
 
+    //Coding Challenge 2 - Player can predefine the winning score
+    predefinedScore = Number(document.querySelector("input").value) || 100;
+    //console.log(predefinedScore);
+    ////////////
+
     //Check if player won the game
-    if (scores[activePlayer] >= 100) {
+
+    if (scores[activePlayer] >= predefinedScore) {
       document.querySelector(`#name-${activePlayer}`).textContent = "Winner";
       document.querySelector(".dice").style.display = "none";
       document
@@ -96,8 +112,8 @@ document.querySelector(".btn-new").addEventListener("click", init);
 
 function init() {
   //state variable
-  winningScore = 100;
   gamePlaying = true;
+
   scores = [0, 0]; // 2 players' scores in one array
   roundScore = 0; // score in one round
   activePlayer = 0; //first player index
