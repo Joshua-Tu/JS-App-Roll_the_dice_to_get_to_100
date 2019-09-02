@@ -9,25 +9,37 @@ GAME RULES:
 
 */
 
-let scores, roundScore, activePlayer, dice, gamePlaying; //gamePlaying is a state variable
+// prevDice is for Coding Challenge 1
+let winningScore, prevDice, scores, roundScore, activePlayer, dice, gamePlaying; //gamePlaying is a state variable
 
 init();
+document.querySelector("input").placeholder = winningScore;
 document.querySelector(".btn-roll").addEventListener("click", () => {
   if (gamePlaying) {
     // 1. Random number
     let dice = Math.floor(Math.random() * 6) + 1;
-
     // 2. Display the result
     let diceDOM = document.querySelector(".dice");
     diceDOM.style.display = "block";
     diceDOM.src = "dice-" + dice + ".png";
     // 3. Update the round score if the rolled number was NOT a one
     if (dice !== 1) {
+      //* ************* Code Challenge 1 - A player loses his entire score when he rolls two 6 in a row. After that, it's the other player's turn/
+      console.log(`prevDice is ${prevDice}`);
+      console.log(`Dice is ${dice}`);
+      if (dice == 6 && prevDice == 6) {
+        document.querySelector("#current-" + activePlayer).textContent = 0;
+        document.querySelector("#score-" + activePlayer).textContent = 0;
+        nextPlayer();
+      }
+      ////*********** */
       //Add score
       roundScore += dice;
       document.querySelector(
         "#current-" + activePlayer
       ).textContent = roundScore;
+
+      prevDice = dice;
     } else {
       //Next player
       nextPlayer();
@@ -67,6 +79,8 @@ function nextPlayer() {
   activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
   roundScore = 0;
 
+  prevDice = undefined;
+
   document.getElementById("current-0").innerHTML = "0";
   document.getElementById("current-1").innerHTML = "0";
 
@@ -82,6 +96,7 @@ document.querySelector(".btn-new").addEventListener("click", init);
 
 function init() {
   //state variable
+  winningScore = 100;
   gamePlaying = true;
   scores = [0, 0]; // 2 players' scores in one array
   roundScore = 0; // score in one round
